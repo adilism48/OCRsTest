@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,7 +53,9 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.googlecode.tesseract.android.TessBaseAPI
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
@@ -84,6 +87,9 @@ class MainActivity : ComponentActivity() {
                         val timeMillis = backStackEntry.arguments?.getLong("timeMillis") ?: 0L
                         ResultPage(navController, ocrEngine, timeMillis)
                     }
+                    composable("history") {
+                        HistoryScreen()
+                    }
                 }
             }
         }
@@ -96,6 +102,7 @@ fun MainPage(navController: NavController) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
     var recognizedText by remember { mutableStateOf("Scanned text will appear here..") }
+    var timeTaken by remember { mutableLongStateOf(0) }
     var recognizingStatus by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
 
@@ -144,6 +151,9 @@ fun MainPage(navController: NavController) {
 
     LaunchedEffect(imageUri, selectedEngine) {
         val currentUri = imageUri
+        val db = OcrDatabase.getDatabase(context)
+        val dao = db.ocrResultDao()
+
         if (currentUri != null) {
             isLoading = true
             recognizingStatus = "Processing with $selectedEngine..."
@@ -158,9 +168,19 @@ fun MainPage(navController: NavController) {
                             val recognized = visionText.text
                             val timeTaken = System.currentTimeMillis() - startTime
 
-                            // Save result to ViewModel or shared state
                             OcrResultStore.imageUri = currentUri
                             OcrResultStore.recognizedText = recognized
+
+                            val result = OcrResult(
+                                ocrEngine = selectedEngine,
+                                recognizedText = recognized,
+                                timestamp = System.currentTimeMillis(),
+                                durationMillis = timeTaken
+                            )
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                dao.insert(result)
+                            }
 
                             navController.navigate("result/MLKit/$timeTaken")
                         }
@@ -173,7 +193,16 @@ fun MainPage(navController: NavController) {
                             tessBaseAPI.setImage(bitmap)
                             recognizedText = tessBaseAPI.utF8Text ?: "No text found"
 
-                            val timeTaken = System.currentTimeMillis() - startTime
+                            timeTaken = System.currentTimeMillis() - startTime
+
+                            val result = OcrResult(
+                                ocrEngine = selectedEngine,
+                                recognizedText = recognizedText,
+                                timestamp = System.currentTimeMillis(),
+                                durationMillis = System.currentTimeMillis() - startTime
+                            )
+
+                            dao.insert(result)
 
                             OcrResultStore.imageUri = imageUri
                             OcrResultStore.recognizedText = recognizedText
@@ -213,6 +242,10 @@ fun MainPage(navController: NavController) {
 
         DropdownWithField(ocrEngines, selectedEngine) {
             selectedEngine = it
+        }
+
+        Button(onClick = { navController.navigate("history") }) {
+            Text("View History")
         }
 
         Row(

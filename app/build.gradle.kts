@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,6 +41,12 @@ android {
 }
 
 dependencies {
+    val room_version = "2.7.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
     implementation("io.coil-kt.coil3:coil-compose:3.2.0")
     implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("cz.adaptech.tesseract4android:tesseract4android:4.8.0")
