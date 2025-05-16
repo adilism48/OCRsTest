@@ -1,4 +1,4 @@
-package com.example.ocrstest
+package com.example.ocrstest.ui.pages
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
+import com.example.ocrstest.data.OcrResultStore
 
 @Composable
 fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long) {

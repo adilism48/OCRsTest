@@ -1,4 +1,4 @@
-package com.example.ocrstest
+package com.example.ocrstest.data
 
 import android.net.Uri
 

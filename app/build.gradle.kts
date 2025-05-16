@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -41,6 +42,10 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
     val room_version = "2.7.1"
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -49,6 +54,7 @@ dependencies {
 
     implementation("io.coil-kt.coil3:coil-compose:3.2.0")
     implementation("androidx.navigation:navigation-compose:2.9.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("cz.adaptech.tesseract4android:tesseract4android:4.8.0")
     implementation(libs.mlkit.gms.text.recognition)
     implementation(libs.androidx.core.ktx)

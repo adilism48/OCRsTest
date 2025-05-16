@@ -1,10 +1,10 @@
-package com.example.ocrstest
+package com.example.ocrstest.data
 
-import OcrResultDao
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.ocrstest.model.OcrResult
 
 @Database(entities = [OcrResult::class], version = 1)
 abstract class OcrDatabase : RoomDatabase() {

@@ -1,4 +1,4 @@
-package com.example.ocrstest
+package com.example.ocrstest.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

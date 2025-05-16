@@ -1,7 +1,9 @@
+package com.example.ocrstest.data
+
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.ocrstest.OcrResult
+import com.example.ocrstest.model.OcrResult
 
 @Dao
 interface OcrResultDao {
