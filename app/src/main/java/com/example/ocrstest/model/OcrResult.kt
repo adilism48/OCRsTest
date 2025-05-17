@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class OcrResult(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val ocrEngine: String,
+    val engineSize: String,
     val recognizedText: String,
     val timestamp: Long,
     val durationMillis: Long

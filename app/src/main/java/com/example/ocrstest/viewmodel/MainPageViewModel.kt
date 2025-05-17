@@ -1,6 +1,5 @@
 package com.example.ocrstest.viewmodel
 
-import com.example.ocrstest.data.OcrResultDao
 import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.getValue
@@ -8,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ocrstest.data.OcrResultDao
 import com.example.ocrstest.data.OcrResultStore
 import com.example.ocrstest.model.OcrResult
 import com.example.ocrstest.utils.prepareTesseractData
@@ -35,6 +35,7 @@ class MainViewModel @Inject constructor(
     var recognizedText by mutableStateOf("")
     var recognizingStatus by mutableStateOf("")
     var selectedEngine by mutableStateOf("ML Kit")
+    var selectedEngineSize by mutableStateOf("~20-30MB")
     var isLoading by mutableStateOf(false)
     private val _navigateToResult = MutableStateFlow<String?>(null)
     val navigateToResult: StateFlow<String?> = _navigateToResult
@@ -62,8 +63,9 @@ class MainViewModel @Inject constructor(
                     val result = textRecognizer.process(image).await()
                     val recognized = result.text
                     val timeTaken = System.currentTimeMillis() - startTime
+                    selectedEngineSize = "~20-30MB"
 
-                    saveResult(uri, recognized, selectedEngine, timeTaken)
+                    saveResult(uri, recognized, selectedEngine, timeTaken, selectedEngineSize)
                 } else {
                     val bitmap = withContext(Dispatchers.IO) {
                         uriToBitmap(appContext, uri)
@@ -78,7 +80,8 @@ class MainViewModel @Inject constructor(
                         }
 
                         val timeTaken = System.currentTimeMillis() - startTime
-                        saveResult(uri, recognized, selectedEngine, timeTaken)
+                        selectedEngineSize = "~22MB"
+                        saveResult(uri, recognized, selectedEngine, timeTaken, selectedEngineSize)
                     } else {
                         recognizingStatus = "Error loading image"
                     }
@@ -91,7 +94,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun saveResult(uri: Uri, text: String, engine: String, time: Long) {
+    private fun saveResult(uri: Uri, text: String, engine: String, time: Long, engineSize: String) {
         recognizedText = text
         OcrResultStore.imageUri = uri
         OcrResultStore.recognizedText = text
@@ -102,10 +105,11 @@ class MainViewModel @Inject constructor(
                 ocrEngine = engine,
                 recognizedText = text,
                 timestamp = System.currentTimeMillis(),
-                durationMillis = time
+                durationMillis = time,
+                engineSize = engineSize
             )
             dao.insert(result)
-            _navigateToResult.value = "$selectedEngine/$time"
+            _navigateToResult.value = "$selectedEngine/$time/$engineSize"
         }
     }
 

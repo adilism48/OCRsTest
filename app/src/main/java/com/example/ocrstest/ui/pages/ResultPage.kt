@@ -28,7 +28,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.ocrstest.data.OcrResultStore
 
 @Composable
-fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long) {
+fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long, engineSize: String) {
     val context = LocalContext.current
     val imageUri = OcrResultStore.imageUri
     val recognizedText = OcrResultStore.recognizedText
@@ -54,7 +54,8 @@ fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long
             )
         }
 
-        Text("Engine: $ocrEngine", modifier = Modifier.padding(top = 8.dp))
+        Text("Model: $ocrEngine", modifier = Modifier.padding(top = 8.dp))
+        Text("Size: $engineSize", modifier = Modifier.padding(top = 8.dp))
         Text("Time taken: ${timeMillis}ms", modifier = Modifier.padding(bottom = 8.dp))
 
         Text(

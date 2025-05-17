@@ -26,15 +26,17 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = "main") {
                     composable("main") { MainPage(navController) }
                     composable(
-                        "result/{ocrEngine}/{timeMillis}",
+                        "result/{ocrEngine}/{timeMillis}/{engineSize}",
                         arguments = listOf(
                             navArgument("ocrEngine") { type = NavType.StringType },
-                            navArgument("timeMillis") { type = NavType.LongType }
+                            navArgument("timeMillis") { type = NavType.LongType },
+                            navArgument("engineSize") { type = NavType.StringType }
                         )
                     ) { backStackEntry ->
                         val ocrEngine = backStackEntry.arguments?.getString("ocrEngine") ?: "Unknown"
                         val timeMillis = backStackEntry.arguments?.getLong("timeMillis") ?: 0L
-                        ResultPage(navController, ocrEngine, timeMillis)
+                        val engineSize = backStackEntry.arguments?.getString("engineSize") ?: "Unknown"
+                        ResultPage(navController, ocrEngine, timeMillis, engineSize)
                     }
                     composable("history") { HistoryScreen() }
                 }
