@@ -68,7 +68,7 @@ fun MainPage(navController: NavController, viewModel: MainViewModel = hiltViewMo
         }
 
         Button(onClick = { navController.navigate("history") }) {
-            Text("View History")
+            Text("История")
         }
 
         Row(
@@ -81,10 +81,10 @@ fun MainPage(navController: NavController, viewModel: MainViewModel = hiltViewMo
                 viewModel.imageUri = uri
                 cameraLauncher.launch(uri)
             }) {
-                Text("Scan from camera")
+                Text("Камера")
             }
             Button(onClick = { galleryLauncher.launch("image/*") }) {
-                Text("Scan from gallery")
+                Text("Галерея")
             }
         }
 

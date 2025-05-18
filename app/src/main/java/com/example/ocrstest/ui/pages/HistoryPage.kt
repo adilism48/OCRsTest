@@ -48,11 +48,11 @@ fun HistoryScreen() {
                 .background(Color.LightGray.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
                 .padding(16.dp)) {
                 Column(modifier = Modifier.padding(8.dp)) {
-                    Text("Model: ${item.ocrEngine}", fontSize = 16.sp)
-                    Text("Size: ${item.engineSize}", fontSize = 16.sp)
-                    Text("Saved: ${Date(item.timestamp)}")
-                    Text("Duration: ${item.durationMillis} ms")
-                    Text("Text: ${item.recognizedText.take(100)}")
+                    Text("Модель: ${item.ocrEngine}", fontSize = 16.sp)
+                    Text("Размер: ${item.engineSize}", fontSize = 16.sp)
+                    Text("Сохранен: ${Date(item.timestamp)}")
+                    Text("Время: ${item.durationMillis} ms")
+                    Text("Текст: ${item.recognizedText.take(100)}")
                 }
             }
         }

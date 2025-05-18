@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
     private fun processImage(uri: Uri) {
         viewModelScope.launch {
             isLoading = true
-            recognizingStatus = "Processing with $selectedEngine..."
+            recognizingStatus = "Обработка с $selectedEngine..."
 
             try {
                 if (selectedEngine == "ML Kit") {
@@ -98,7 +98,7 @@ class MainViewModel @Inject constructor(
         recognizedText = text
         OcrResultStore.imageUri = uri
         OcrResultStore.recognizedText = text
-        recognizingStatus = "Completed"
+        recognizingStatus = "Завершено"
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = OcrResult(

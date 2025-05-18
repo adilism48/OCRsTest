@@ -41,7 +41,7 @@ fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("OCR Result", fontSize = 24.sp, modifier = Modifier.padding(8.dp))
+        Text("OCR Результат", fontSize = 24.sp, modifier = Modifier.padding(8.dp))
 
         if (imageUri != null) {
             Image(
@@ -54,9 +54,9 @@ fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long
             )
         }
 
-        Text("Model: $ocrEngine", modifier = Modifier.padding(top = 8.dp))
-        Text("Size: $engineSize", modifier = Modifier.padding(top = 8.dp))
-        Text("Time taken: ${timeMillis}ms", modifier = Modifier.padding(bottom = 8.dp))
+        Text("Модель: $ocrEngine", modifier = Modifier.padding(top = 8.dp))
+        Text("Размер: $engineSize", modifier = Modifier.padding(top = 8.dp))
+        Text("Время: ${timeMillis}ms", modifier = Modifier.padding(bottom = 8.dp))
 
         Text(
             text = recognizedText,
@@ -72,17 +72,17 @@ fun ResultPage(navController: NavController, ocrEngine: String, timeMillis: Long
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("OCR Text", recognizedText)
                 clipboard.setPrimaryClip(clip)
-                Toast.makeText(context, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Текст скопирован", Toast.LENGTH_SHORT).show()
             }
         ) {
-            Text("Copy Text")
+            Text("Скопировать")
         }
 
         Button(
             modifier = Modifier.padding(top = 8.dp),
             onClick = { navController.popBackStack() }
         ) {
-            Text("Back")
+            Text("Назад")
         }
     }
 }
